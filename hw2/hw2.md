@@ -32,3 +32,43 @@
 
       Therefore, adding  **256 MB** would be the most beneficial.
 
+## Ex. 2 Keymap in Minix3
+
+Map Shift + F7 to display how many processes are currently running.
+
+1. Modify "dmp.c" file (`/usr/src/servers/is/dmp.c`) and find the struct hook_entry. Add the entry
+
+   ```c#
+   {SF7, proccnt_dmp, "Display the number of running processes"},
+   ```
+
+2. Modify "dmp_Kernel.c" file ('/usr/src/servers/is/dmp_kernel.c'), adding the function `void proccnt_dmp();`
+
+   ```c#
+   void proccnt_dmp()
+   {
+     struct mproc *mp;
+     int i,n=0;
+     if(getsysinfo(PM_PROC_NR, SI_PROC_TAB, mproc, sizeof(mproc))!=OK){
+       printf("Error obtaining table from PM. Perhaps recompile IS?\n");
+       return;
+     }
+     for(i=0;i<NR_PROCS;i++){
+       mp=&mproc[i];
+       if(mp->mp_pid==0 && i!=PM_PROC_NR) continue;
+       n++;
+     }
+     printf("Number of running processes: %d\n",n);
+   } 
+   ```
+
+3. Modify the "proto.h" file ('/usr/src/servers/is/proto.h'). Add "'void proccnt_dmp(void)';" to it
+
+4. ```sh
+   cd /usr/src
+   make build
+   reboot
+   ```
+
+5. 
+
