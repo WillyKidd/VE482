@@ -47,28 +47,32 @@ Map Shift + F7 to display how many processes are currently running.
    ```c#
    void proccnt_dmp()
    {
-     struct mproc *mp;
-     int i,n=0;
-     if(getsysinfo(PM_PROC_NR, SI_PROC_TAB, mproc, sizeof(mproc))!=OK){
-       printf("Error obtaining table from PM. Perhaps recompile IS?\n");
-       return;
-     }
-     for(i=0;i<NR_PROCS;i++){
-       mp=&mproc[i];
-       if(mp->mp_pid==0 && i!=PM_PROC_NR) continue;
-       n++;
-     }
-     printf("Number of running processes: %d\n",n);
-   } 
+       int ret;
+       if((ret = sys_getproctab(proc)) != OK)
+       {
+           printf("Problem occurred when getting process table : %d\n", ret);
+   	}
+       int proc_cnt = 0;
+       register struct proc *rp;
+       for(rp = BEG_PROC_ADDR; rp < END_PROC_ADDR; rp++)
+       {
+           if(isemptyp(rp)) continue;
+           proc_cnt++;
+   	}
+       printf("The number of currently running processes is: %d\n", proc_cnt);
+   }
    ```
 
-3. Modify the "proto.h" file ('/usr/src/servers/is/proto.h'). Add "'void proccnt_dmp(void)';" to it
+3. Modify the "proto.h" file ('/usr/src/servers/is/proto.h'). Add declaration 'void proccnt_dmp(void);' 
 
 4. ```sh
    cd /usr/src
+   # recompile the kernel and reboot
    make build
+   # it took me 11 minutes to recompile...
    reboot
    ```
-
-5. 
+   
+5. Result:
+   <img src="sf7.png" alt="1_2" width="500"/>
 
