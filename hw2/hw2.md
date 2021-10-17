@@ -7,7 +7,7 @@
 <div><img src="cat.jpg" width="180px" align="right"></div>
 
 # VE482 Homework 2
-# <span style="font-family:Myriad Pro; font-size:0.6em;"> Weili Shi 519370910011  Oct 11, 2021</span>
+# <span style="font-family:Myriad Pro; font-size:0.6em;"> Weili Shi | 519370910011 | Oct 11, 2021</span>
 ## Ex.1 Multiprogramming
 
 1. Probability of n processes waiting at the same time: **$p^n$**
@@ -36,13 +36,13 @@
 
 Map Shift + F7 to display how many processes are currently running.
 
-1. Modify "dmp.c" file (`/usr/src/servers/is/dmp.c`) and find the struct hook_entry. Add the entry
+1. Modify `dmp.c` file (`/usr/src/servers/is/dmp.c`) and find the struct `hook_entry`. Add the entry
 
    ```c#
    {SF7, proccnt_dmp, "Display the number of running processes"},
    ```
 
-2. Modify "dmp_Kernel.c" file ('/usr/src/servers/is/dmp_kernel.c'), adding the function `void proccnt_dmp();`
+2. Modify `dmp_Kernel.c` file (`/usr/src/servers/is/dmp_kernel.c`), adding the function `void proccnt_dmp();`
 
    ```c#
    void proccnt_dmp()
@@ -63,16 +63,16 @@ Map Shift + F7 to display how many processes are currently running.
    }
    ```
 
-3. Modify the "proto.h" file ('/usr/src/servers/is/proto.h'). Add declaration 'void proccnt_dmp(void);' 
+3. Modify the `proto.h` file (`/usr/src/servers/is/proto.h`). Add declaration `void proccnt_dmp(void);` 
 
 4. ```sh
    cd /usr/src
    # recompile the kernel and reboot
    make build
-   # it took me 11 minutes to recompile...
+   # it took me 11 minutes to recompile, with 256MB memory...
    reboot
    ```
    
 5. Result:
-   <img src="sf7.png" alt="1_2" width="500"/>
+   <img src="sf7.png" alt="sf7"/>
 
