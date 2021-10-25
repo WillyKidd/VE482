@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -std=gnu11 -O2 -Wall -Wextra -Werror -pedantic -Wno-unused-result
+CFLAGS = -std=gnu11 -O2 -Wall -Wextra -Werror -pedantic -Wno-unused-result -Wconversion -Wvla
 SRC = *.c
 LIST = list
 LISTMC = list_memory_check

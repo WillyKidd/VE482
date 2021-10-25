@@ -28,7 +28,7 @@ int getType(char* file_name)
     type = strtok(NULL, ".");
     if(!strcmp(type, "int")) return INT;
     if(!strcmp(type, "double")) return DOUBLE;
-    if(!strcmp(type, "string")) return STRING;
+    if(!strcmp(type, "char*")) return STRING;
     return -1;
 }
 
@@ -39,13 +39,17 @@ int main(int argc, char** argv)
         printf("error: too few arguments.\n");
         return 0;
     }
+    printf("%s\n", argv[0]);
     List *l = listInit(argv[1], getType(argv[1]));
+    printf("initOK\n");
     char output_fname[MAX_LINE] = "";
     strcat(output_fname, argv[2]);
     strcat(output_fname, "_");
     strcat(output_fname, DTYPE[getType(argv[1])]);
     strcat(output_fname, ".txt");
+    printf("start sort\n");
     listSort(l, getType(argv[1]), getOrder(argv[2]));
     listPrintToFile(l, output_fname, getType(argv[1]));
+    listFree(l);
     return 0;
 }

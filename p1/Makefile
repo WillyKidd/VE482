@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -std=gnu11 -O2 -Wall -Wextra -Werror -pedantic -Wno-unused-result
+CFLAGS = -std=gnu11 -O2 -Wall -Wextra -Werror -pedantic -Wno-unused-result -g
 MUMSH_SRC = *.c
 MUMSH = mumsh
 MUMSHMC = mumsh_memory_check

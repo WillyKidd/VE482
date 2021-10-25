@@ -5,8 +5,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define MAX_ARG 1024
-#define MAX_LINE 255
+#define MAX_ARG 128 
+#define MAX_LINE 2048
 
 enum Dtype
 {
@@ -39,17 +39,17 @@ typedef struct List
 
 static int intInc(const void *a, const void *b)
 {
-    return (*((int *)(((Node *)a)->val)) > *((int *)(((Node *)b)->val)));
+    return (*((int *)(((Node *)a)->val)) >= *((int *)(((Node *)b)->val)));
 }
 
 static int doubleInc(const void *a, const void *b)
 {
-    return (*((double *)(((Node *)a)->val)) > *((double *)(((Node *)b)->val)));
+    return (*((double *)(((Node *)a)->val)) >= *((double *)(((Node *)b)->val)));
 }
 
 static int strInc(const void *a, const void *b)
 {
-    return strcmp((char *)(((Node *)a)->val), (char *)(((Node *)b)->val));
+    return (strcmp((char *)(((Node *)a)->val), (char *)(((Node *)b)->val)) >= 0);
 }
 
 static int intDec(const void *a, const void *b){return intInc(b, a);}
@@ -78,5 +78,6 @@ List *listInit(char *file_name, int dtype);
 void listInsert(List *l, char *key, void *val);
 void listSort(List *l, int dtype, int order);
 void listPrintToFile(List *l, char *file_name, int dtype);
+void listFree(List *l);
 
 #endif

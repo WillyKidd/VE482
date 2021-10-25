@@ -33,4 +33,12 @@
 
 ## Ex 2. C programming
 
-   
+## Ex 3. POSIX
+
+POSIX stands for the Portable Operating System Interface. It is specified by IEEE, and contains a family of standards to help maintain the compatibility between different operating systems, such that developers can port applications for different operating systems more easily. For example, POSIX defines the application programming interface (API), command line shells for software compatibility with variants of Unix and other operating systems.
+
+POSIX 7 defines the following: C API, CLI utilities, shell language, environment variables, program exit status, regular expression, directory structure, and so on. If we write programs according to POSIX standards, it would be easy for us to port the program to lots of Unix derivatives, which is very convenient [^1].
+
+## Reference
+
+[^1]:“What is the meaning of POSIX?” *stack overflow*,  https://stackoverflow.com/questions/1780599/what-is-the-meaning-of-posix. 
