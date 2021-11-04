@@ -1,22 +1,23 @@
 CC = clang
-CFLAGS = -std=gnu11 -O2 -Wall -Wextra -Werror -pedantic -Wno-unused-result -Wconversion -Wvla
-L5_SRC = *.c
-L5 = l5
-L5MC = l5_memory_check
-L5MC_FLAGS = -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=integer
-PHONY: clean
+CFLAGS = -std=gnu11 -O2 -Wall -Werror -Wconversion -pedantic -Wno-unused-result
+MCFLAGS = -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined -fsanitize=integer
+EX1_SRC = list.c sort.c ui.c
+MAIN_CMD = main_cmd.c
+MAIN_MENU = main_menu.c
+EX1_H = *.h
+CMD = cmd
+MENU = menu
 
-all: $(L5) $(L5MC)
-	@echo l5 successfully constructed
+.PHONY: clean
 
-$(L5): $(L5_SRC)
-	$(CC) $(CFLAGS) -o $(LIST) $(L5_SRC)
+all: $(CMD) $(MENU)
+	@echo EX1 successfully constructed
 
-$(L5MC) : $(L5_SRC)
-	$(CC) $(CFLAGS) $(L5MC_FLAGS) -o $(L5MC) $(L5_SRC)
+$(CMD): $(EX1_SRC) $(EX1_H)
+	$(CC) $(CFLAGS) $(MCFLAGS) -o $(CMD) $(EX1_SRC) $(MAIN_CMD)
 
-.c.o:
-	$(CC) $(CFLAGS) -c $< -o $@
+$(MENU): $(EX1_SRC) $(EX1_H)
+	$(CC) $(CFLAGS) $(MCFLAGS) -o $(MENU) $(EX1_SRC) $(MAIN_MENU)
 
 clean:
-	$(RM) *.o *.a *~ $(L5) $(L5MC)
+	$(RM) *.o *.a $(CMD) $(MENU) *.txt
