@@ -1,0 +1,5 @@
+mmm=10
+nnn=8
+qqq=6
+jjj=2
+ooo=0
