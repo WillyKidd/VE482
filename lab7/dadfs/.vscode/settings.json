@@ -1,0 +1,20 @@
+{
+  "files.associations": {
+    "string.h": "c",
+    "fcntl.h": "c",
+    "stdlib.h": "c",
+    "stdint.h": "c",
+    "types.h": "c",
+    "fs.h": "c",
+    "dcache.h": "c",
+    "kdev_t.h": "c",
+    "wait_bit.h": "c",
+    "percpu-rwsem.h": "c",
+    "rcu_sync.h": "c",
+    "rcuwait.h": "c",
+    "signal.h": "c",
+    "task.h": "c",
+    "uaccess.h": "c"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
+}

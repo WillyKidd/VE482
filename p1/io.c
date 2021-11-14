@@ -24,7 +24,7 @@ char getFirst(char *line)
 
 char getLast(char *line)
 {
-    char last;
+    char last = 0;
     for(unsigned int i = 0; i < strlen(line); i++)
     {
         if(!isspace(line[i])) last = line[i];
@@ -34,7 +34,7 @@ char getLast(char *line)
 
 char getLastLast(char *line)
 {
-    char last, lastlast;
+    char last = 0, lastlast = 0;
     for(unsigned int i = 0; i < strlen(line); i++)
     {
         if(!isspace(line[i]))

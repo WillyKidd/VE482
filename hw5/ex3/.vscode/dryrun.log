@@ -1,0 +1,6 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/willykid/Documents/VE482/hw5/ex3'
+clang++ -O2 -Wall -Wextra -Werror -pedantic -Wno-unused-result -Wconversion -Wvla -o banker banker.cpp
+echo "banker successfully constructed"
+make: Leaving directory '/home/willykid/Documents/VE482/hw5/ex3'
+ 
