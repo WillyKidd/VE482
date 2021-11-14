@@ -359,7 +359,7 @@ int dadfs_inode_save(struct super_block *sb, struct dadfs_inode *sfs_inode)
 ssize_t dadfs_write(struct file * filp, const char __user * buf, size_t len,
 		       loff_t * ppos)
 #else 
-ssize_t dadfswrite(struct kiocb * kiocb, struct iov_iter * iov_iter)
+ssize_t dadfs_write(struct kiocb * kiocb, struct iov_iter * iov_iter)
 #endif
 {
 	/* After the commit dd37978c5 in the upstream linux kernel,
@@ -388,6 +388,7 @@ ssize_t dadfswrite(struct kiocb * kiocb, struct iov_iter * iov_iter)
 
 #if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)
 	retval = generic_write_checks(filp, ppos, &len, 0);
+// souce of problem
 #else
 	retval = generic_write_checks(kiocb, iov_iter);
 #endif
@@ -433,6 +434,7 @@ ssize_t dadfswrite(struct kiocb * kiocb, struct iov_iter * iov_iter)
 #else
 	if (copy_from_iter(buffer, iov_iter->count, iov_iter)) {
 // size_t copy_from_iter(void *addr, size_t bytes, struct iov_iter *i)
+// copies data pointed by iov_iter to buffer
 // return value: number of bytes not copied
 #endif
 		brelse(bh);
@@ -440,7 +442,14 @@ ssize_t dadfswrite(struct kiocb * kiocb, struct iov_iter * iov_iter)
 		       "Error copying file contents from the userspace buffer to the kernel space\n");
 		return -EFAULT;
 	}
+// updates current IO position after copying from iter
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)
 	*ppos += len;
+#else
+	kiocb->ki_pos += iov_iter->count;
+// ki_pos: Current file position of the ongoing I/O operation
+// The total amount of data pointed to by the iovec array
+#endif
 
 	retval = jbd2_journal_dirty_metadata(handle, bh);
 	if (WARN_ON(retval)) {
@@ -468,19 +477,33 @@ ssize_t dadfswrite(struct kiocb * kiocb, struct iov_iter * iov_iter)
 		sfs_trace("Failed to acquire mutex lock\n");
 		return -EINTR;
 	}
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)
 	sfs_inode->file_size = *ppos;
 	retval = dadfs_inode_save(sb, sfs_inode);
 	if (retval) {
 		len = retval;
 	}
 	mutex_unlock(&dadfs_inodes_mgmt_lock);
-
 	return len;
+#else
+	sfs_inode->file_size = kiocb->ki_pos;
+	retval = dadfs_inode_save(sb, sfs_inode);
+	if (retval) {
+		iov_iter->count = retval;
+	}
+	mutex_unlock(&dadfs_inodes_mgmt_lock);
+	return iov_iter->count;
+#endif
 }
 
 const struct file_operations dadfs_file_operations = {
 	.read = dadfs_read,
+#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 0, 0)
 	.write = dadfs_write,
+#else
+	.write_iter = dadfs_write,
+// ssize_t dadfs_write(struct kiocb * kiocb, struct iov_iter * iov_iter)
+#endif
 };
 
 const struct file_operations dadfs_dir_operations = {
@@ -751,9 +774,10 @@ static int dadfs_load_journal(struct super_block *sb, int devnum)
 	struct dadfs_super_block *sfs_sb = DADFS_SB(sb);
 
 	dev = new_decode_dev(devnum);
-	printk(KERN_INFO "Journal device is: %s\n", __bdevname(dev, b));
-
 	bdev = blkdev_get_by_dev(dev, FMODE_READ|FMODE_WRITE|FMODE_EXCL, sb);
+	printk(KERN_INFO "Journal device is: %s\n", bdevname(bdev, b));
+
+	// bdev = blkdev_get_by_dev(dev, FMODE_READ|FMODE_WRITE|FMODE_EXCL, sb);
 	if (IS_ERR(bdev))
 		return 1;
 	blocksize = sb->s_blocksize;
