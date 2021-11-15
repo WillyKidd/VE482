@@ -14,7 +14,8 @@
     "rcuwait.h": "c",
     "signal.h": "c",
     "task.h": "c",
-    "uaccess.h": "c"
+    "uaccess.h": "c",
+    "blkdev.h": "c"
   },
   "C_Cpp.errorSquiggles": "Disabled"
 }

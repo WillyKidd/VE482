@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE=./file
+FILE=./race.txt
 
 if ! [ -s $FILE ]; then
   echo 1 > $FILE
